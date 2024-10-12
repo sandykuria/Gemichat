@@ -29,10 +29,12 @@ class ChatViewModel: ViewModel() {
             )
 
             messageList.add(MessageModel(question, "User"))
+            messageList.add(MessageModel("Typing", "model"))
 
             val response = chat.sendMessage(question)
+            messageList.removeLast()
             messageList.add(MessageModel(response.text.toString(), "model"))
-            Log.i("Response from Gemini", response.text.toString())
+
         }
     }
 }
