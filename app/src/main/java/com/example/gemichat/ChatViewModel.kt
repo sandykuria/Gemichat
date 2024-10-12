@@ -22,18 +22,26 @@ class ChatViewModel: ViewModel() {
 
     fun sendMessage(question : String){
         viewModelScope.launch {
-            val chat = generativeModel.startChat(
-                history = messageList.map {
-                    content(it.role){text(it.message)}
-                }.toList()
-            )
 
-            messageList.add(MessageModel(question, "User"))
-            messageList.add(MessageModel("Typing", "model"))
+            try {
+                val chat = generativeModel.startChat(
+                    history = messageList.map {
+                        content(it.role){text(it.message)}
+                    }.toList()
+                )
 
-            val response = chat.sendMessage(question)
-            messageList.removeLast()
-            messageList.add(MessageModel(response.text.toString(), "model"))
+                messageList.add(MessageModel(question, "User"))
+                messageList.add(MessageModel("Typing", "model"))
+
+                val response = chat.sendMessage(question)
+                messageList.removeLast()
+                messageList.add(MessageModel(response.text.toString(), "model"))
+            } catch (e:Exception){
+                messageList.removeLast()
+                messageList.add(MessageModel("Error :"+e.message.toString(),"model"))
+            }
+
+
 
         }
     }
