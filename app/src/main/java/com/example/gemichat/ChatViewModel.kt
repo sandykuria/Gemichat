@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
 
 class ChatViewModel: ViewModel() {
@@ -21,7 +22,11 @@ class ChatViewModel: ViewModel() {
 
     fun sendMessage(question : String){
         viewModelScope.launch {
-            val chat = generativeModel.startChat()
+            val chat = generativeModel.startChat(
+                history = messageList.map {
+                    content(it.role){text(it.message)}
+                }.toList()
+            )
 
             messageList.add(MessageModel(question, "User"))
 
