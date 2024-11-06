@@ -36,11 +36,15 @@ import androidx.compose.ui.unit.sp
 import com.example.gemichat.ui.theme.ColorModelMessage
 import com.example.gemichat.ui.theme.ColorUserMessage
 import com.example.gemichat.ui.theme.Purple80
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 @Composable
 fun ChatPage (modifier: Modifier = Modifier,viewModel: ChatViewModel){
     Column(
         modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding()
     ){
         AppHeader()
         MessageList(modifier = Modifier.weight(1f), messageList = viewModel.messageList)
@@ -118,6 +122,7 @@ fun MessageInput(onMesssageSend: (String)-> Unit){
     var message by remember {
         mutableStateOf("")
     }
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row (
         modifier = Modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -131,10 +136,9 @@ fun MessageInput(onMesssageSend: (String)-> Unit){
         )
         IconButton(onClick = {
             if (message.isNotEmpty()){
+                onMesssageSend(message)
                 message = ""
             }
-            onMesssageSend(message)
-            message = ""
         }) {
             Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
         }
