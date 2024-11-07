@@ -40,9 +40,6 @@ class ChatViewModel: ViewModel() {
                 messageList.removeLast()
                 messageList.add(MessageModel("Error :"+e.message.toString(),"model"))
             }
-
-
-
         }
     }
 }

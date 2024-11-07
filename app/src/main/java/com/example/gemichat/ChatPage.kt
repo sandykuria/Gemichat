@@ -39,6 +39,7 @@ import com.example.gemichat.ui.theme.Purple80
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
+//Displays the entire chat page layout
 @Composable
 fun ChatPage (modifier: Modifier = Modifier,viewModel: ChatViewModel){
     Column(
@@ -55,6 +56,7 @@ fun ChatPage (modifier: Modifier = Modifier,viewModel: ChatViewModel){
     }
 }
 
+//Displays list of messages in a scrollable column
 @Composable
 fun MessageList(modifier: Modifier = Modifier,messageList : List<MessageModel>){
     if (messageList.isEmpty()){
@@ -69,15 +71,15 @@ fun MessageList(modifier: Modifier = Modifier,messageList : List<MessageModel>){
                 contentDescription = "Icon",
                 tint = Purple80,
             )
-            Text(text = "Ask me anything", fontSize = 22.sp)
+            Text(text = "Ask me anything", fontSize = 22.sp)  //Instructional text
         }
     }else {
         LazyColumn(
             modifier = Modifier,
-            reverseLayout = true
+            reverseLayout = true  //Reverses list to start from the bottom
         ) {
-            items(messageList.reversed()){
-                MessageRow(messageModel = it)
+            items(messageList.reversed()){  //Displays messages in reverse order
+                MessageRow(messageModel = it)   //
             }
         }
     }
@@ -105,9 +107,9 @@ fun MessageRow(messageModel: MessageModel){
                     .background(if (isModel) ColorModelMessage else ColorUserMessage)
                     .padding(16.dp)
             ){
-                SelectionContainer {
+                SelectionContainer {     //Allows text selection in the message
                     Text(
-                        text = messageModel.message,
+                        text = messageModel.message,     //Displays message
                         fontWeight = FontWeight.W500,
                         color = Color.White
                     )
@@ -117,10 +119,11 @@ fun MessageRow(messageModel: MessageModel){
     }
 }
 
+// MessageInput composable providing a text input and send button
 @Composable
 fun MessageInput(onMesssageSend: (String)-> Unit){
     var message by remember {
-        mutableStateOf("")
+        mutableStateOf("") // stores the message typed by the user
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     Row (
@@ -131,13 +134,13 @@ fun MessageInput(onMesssageSend: (String)-> Unit){
             modifier = Modifier.weight(1f),
             value = message,
             onValueChange = {
-                message = it
+                message = it   //updates message text as user types
             }
         )
         IconButton(onClick = {
             if (message.isNotEmpty()){
                 onMesssageSend(message)
-                message = ""
+                message = ""  //clears input field after sending
             }
         }) {
             Icon(imageVector = Icons.Default.Send, contentDescription = "Send")
